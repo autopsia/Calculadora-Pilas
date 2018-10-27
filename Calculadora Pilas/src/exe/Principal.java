@@ -6,13 +6,48 @@ import entities.*;
  * @author Autopsia
  */
 public class Principal extends javax.swing.JFrame {
-    PilaChars operadores;
+    PilaChars expresion;
     PilaNums numeros;
+    int n;
     
     public Principal() {
         initComponents();
+        setTitle("Calculadora Pilas");
+        n = 100;
+        numeros = new PilaNums(n);
+        expresion = new PilaChars(n);
     }
+    public void convertirAPostfija(){
+        String postfija, acum, a, b, infija;
+        char caracter;
+        int n, i, j;
+        postfija="";
+        infija = txtDisplay.getText();
+        n = infija.length();
+        acum = "";
 
+        for (i = 0; i < n; i++)
+        {
+            caracter = infija.charAt(i);
+            if(caracter == '('){
+                expresion.poner(caracter+"");
+            }
+            else if(Character.isDigit(caracter)){
+                postfija = postfija + caracter;
+                for(j=i+1; j<n ; j++){
+                    if(Character.isDigit(infija.charAt(j)) || infija.charAt(j) == '.'){
+                        postfija = postfija + infija.charAt(j)+"";
+                    }
+                        break;
+                    
+                }
+                postfija = postfija + ", ";
+                break;
+            }
+            
+        }
+        txtDisplay.setText(postfija);
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -402,7 +437,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDecimalActionPerformed
 
     private void btnEqualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualsActionPerformed
-        // TODO add your handling code here:
+        convertirAPostfija();
     }//GEN-LAST:event_btnEqualsActionPerformed
 
     private void btnCEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCEActionPerformed
@@ -411,7 +446,6 @@ public class Principal extends javax.swing.JFrame {
             String neoaux = aux.substring(0, aux.length() - 1);
             txtDisplay.setText(neoaux);
         }
-        //txtDisplay.setText(txtDisplay.getText()+"1");
     }//GEN-LAST:event_btnCEActionPerformed
 
     private void btnPlusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlusActionPerformed
