@@ -37,8 +37,11 @@ public class Principal extends javax.swing.JFrame {
                 for(j=i+1; j<n ; j++){
                     if(Character.isDigit(infija.charAt(j)) || infija.charAt(j) == '.'){
                         postfija = postfija + infija.charAt(j)+"";
-                    }
+                    }else{
+                        postfija = postfija + infija.charAt(i)+"";
                         break;
+                    }
+                        
                     
                 }
                 postfija = postfija + ", ";
