@@ -72,6 +72,7 @@ public class Principal extends javax.swing.JFrame {
                 postfija = postfija + temp+", ";
                 num= 0;
                 temp="";
+                i=j;
             }else{
                 
             }
