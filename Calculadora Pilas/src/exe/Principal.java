@@ -46,19 +46,13 @@ public class Principal extends javax.swing.JFrame {
         {
             caracter = infija.charAt(i);
             if(caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '^'){
+                if(i == 0 && caracter == '-'){
+                    numeros.poner(0);
+                }
                 prioridad = prioridad(caracter);
                 expresion.poner(caracter+"");
             }
             else if(Character.isDigit(caracter)){
-                if(i != 0){
-                    if(infija.charAt(i-1) == '-' && i-1==0){
-                            temp="-";
-                    }else if(infija.charAt(i-1) == '-' && !Character.isDigit(infija.charAt(i-2))){
-                            temp="-";
-                    }else if(infija.charAt(i-2) == '-' || infija.charAt(i-2) == '+' || infija.charAt(i-2) == '*' || infija.charAt(i-2) == '*'){
-                            temp="-";
-                    }
-                }
                 temp = temp + caracter;
                 for(j=i+1; j<n ; j++){
                     if(Character.isDigit(infija.charAt(j)) || infija.charAt(j) == '.'){
