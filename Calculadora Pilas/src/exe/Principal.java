@@ -17,35 +17,64 @@ public class Principal extends javax.swing.JFrame {
         numeros = new PilaNums(n);
         expresion = new PilaChars(n);
     }
-    public void convertirAPostfija(){
-        String postfija, acum, a, b, infija;
+    public int prioridad(char caracter){
+                    switch(caracter){
+                    case '*':
+                        return 1;
+                    case '/':
+                        return 1;
+                    case '+':
+                        return 2;
+                    case '-':
+                        return 2;
+                }
+                    return -1;
+    }
+    public void infijaAPostfija(){
+        String postfija, acum, a, b, infija, temp;
         char caracter;
-        int n, i, j;
+        int n, i, j, prioridad;
+        double num;
         postfija="";
         infija = txtDisplay.getText();
         n = infija.length();
         acum = "";
-
+        temp = "";
+        num= 0;
+        prioridad = -1;
         for (i = 0; i < n; i++)
         {
             caracter = infija.charAt(i);
-            if(caracter == '('){
+            if(caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '^'){
+                prioridad = prioridad(caracter);
                 expresion.poner(caracter+"");
             }
             else if(Character.isDigit(caracter)){
-                postfija = postfija + caracter;
+                if(i != 0){
+                    if(infija.charAt(i-1) == '-' && i-1==0){
+                            temp="-";
+                    }else if(infija.charAt(i-1) == '-' && !Character.isDigit(infija.charAt(i-2))){
+                            temp="-";
+                    }else if(infija.charAt(i-2) == '-' || infija.charAt(i-2) == '+' || infija.charAt(i-2) == '*' || infija.charAt(i-2) == '*'){
+                            temp="-";
+                    }
+                }
+                temp = temp + caracter;
                 for(j=i+1; j<n ; j++){
                     if(Character.isDigit(infija.charAt(j)) || infija.charAt(j) == '.'){
-                        postfija = postfija + infija.charAt(j)+"";
+                        temp = temp + infija.charAt(j)+"";
                     }else{
-                        postfija = postfija + infija.charAt(i)+"";
                         break;
                     }
-                        
-                    
                 }
-                postfija = postfija + ", ";
-                break;
+                num = Double.parseDouble(temp);
+                numeros.poner(num);
+                postfija = postfija + temp+", ";
+                num= 0;
+                temp="";
+                i=j;
+            }else{
+                
             }
             
         }
@@ -55,7 +84,6 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
         btn7 = new javax.swing.JButton();
         btn8 = new javax.swing.JButton();
         btn9 = new javax.swing.JButton();
@@ -77,15 +105,6 @@ public class Principal extends javax.swing.JFrame {
         btnPare1 = new javax.swing.JButton();
         btnPare2 = new javax.swing.JButton();
         txtDisplay = new javax.swing.JTextField();
-
-        jButton3.setText("1");
-        jButton3.setMaximumSize(new java.awt.Dimension(40, 40));
-        jButton3.setMinimumSize(new java.awt.Dimension(40, 40));
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -259,7 +278,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        btnDivision.setText("÷");
+        btnDivision.setText("/");
         btnDivision.setMargin(new java.awt.Insets(0, 0, 0, 0));
         btnDivision.setMaximumSize(new java.awt.Dimension(40, 40));
         btnDivision.setMinimumSize(new java.awt.Dimension(40, 40));
@@ -399,10 +418,6 @@ public class Principal extends javax.swing.JFrame {
         txtDisplay.setText(txtDisplay.getText()+"8");
     }//GEN-LAST:event_btn8ActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"3");
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void btn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn9ActionPerformed
         txtDisplay.setText(txtDisplay.getText()+"9");
     }//GEN-LAST:event_btn9ActionPerformed
@@ -440,7 +455,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnDecimalActionPerformed
 
     private void btnEqualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualsActionPerformed
-        convertirAPostfija();
+        infijaAPostfija();
     }//GEN-LAST:event_btnEqualsActionPerformed
 
     private void btnCEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCEActionPerformed
@@ -468,7 +483,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnMultiActionPerformed
 
     private void btnDivisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivisionActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"÷");
+        txtDisplay.setText(txtDisplay.getText()+"/");
     }//GEN-LAST:event_btnDivisionActionPerformed
 
     private void btnPare1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPare1ActionPerformed
@@ -539,7 +554,6 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JButton btnPare1;
     private javax.swing.JButton btnPare2;
     private javax.swing.JButton btnPlus;
-    private javax.swing.JButton jButton3;
     private javax.swing.JTextField txtDisplay;
     // End of variables declaration//GEN-END:variables
 }
