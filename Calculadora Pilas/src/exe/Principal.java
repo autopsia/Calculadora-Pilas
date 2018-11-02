@@ -18,7 +18,7 @@ public class Principal extends javax.swing.JFrame {
         operadores = new PilaChars(n);
     }
     public boolean siEsOperador(char caracter){
-        if(caracter == '(' || caracter == ')' || caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '^'  || caracter == '^'){
+        if(caracter == '(' || caracter == ')' || caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '^'  || caracter == '%'){
             return true;
         }else{
             return false;
@@ -26,47 +26,45 @@ public class Principal extends javax.swing.JFrame {
     }
     public int prioridad(char caracter){
                     switch(caracter){
+                    case '^':
+                        return 3;
                     case '*':
                     case '/':
-                        return 1;
+                    case '%':
+                        return 2;
                     case '+':
                     case '-':
-                        return 2;
+                        return 1;
                 }
                     return -1;
     }
     public void infijaAPostfija(){
-        String postfija, a, b, infija;
+        String postfija, infija;
         char caracter;
-        int n, i, j;
+        int n, i;
         postfija="";
         infija = txtDisplay.getText();
         n = infija.length();
         for (i = 0; i < n; i++)
         {
             caracter = infija.charAt(i);
-            if(siEsOperador(caracter)){
-              if(caracter == ')'){
+            if(caracter == '('){
+                operadores.poner(caracter);
+            }
+            else if(caracter == ')'){
                     while(!operadores.estaVacio() && operadores.verUltimo() != '('){
                         postfija += operadores.sacar()+", ";
-                    }if(!operadores.estaVacio()){
+                    }
                         operadores.sacar();
-                    }
-                }else if (siEsOperador(caracter)){
-                    if(!operadores.estaVacio() && prioridad(caracter) <= prioridad(operadores.verUltimo())){
-                        postfija += operadores.sacar()+", ";
-                    }else{
-                        while(!operadores.estaVacio() && prioridad(caracter) >= prioridad(operadores.verUltimo())){
-                            String encima = operadores.sacar()+"";
-                            if(!encima.equals("(")){
-                                postfija += encima+", ";
-                            }
-                        }
-                    }
-                    operadores.poner(caracter);
-                }
-  
-            }
+                    
+                
+                    }  
+              else if (siEsOperador(caracter)){
+                    while(!operadores.estaVacio() && operadores.verUltimo() != '(' && prioridad(caracter) <= prioridad(operadores.verUltimo())){
+                        postfija += operadores.sacar()+", ";  
+                }operadores.poner(caracter);
+              }
+            
             else if(!siEsOperador(caracter)){
                 if(i+1<n && !siEsOperador(infija.charAt(i+1))  ){
                     postfija = postfija + caracter;
@@ -80,7 +78,8 @@ public class Principal extends javax.swing.JFrame {
         while(!operadores.estaVacio()){
             postfija += operadores.sacar()+", ";
         }
-        txtDisplay.setText(postfija);
+        
+        txtDisplay.setText(postfija.substring(0, postfija.length()-2));
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
