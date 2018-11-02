@@ -6,7 +6,7 @@ import entities.*;
  * @author Autopsia
  */
 public class Principal extends javax.swing.JFrame {
-    PilaChars expresion;
+    PilaChars operadores;
     PilaNums numeros;
     int n;
     
@@ -15,62 +15,70 @@ public class Principal extends javax.swing.JFrame {
         setTitle("Calculadora Pilas");
         n = 100;
         numeros = new PilaNums(n);
-        expresion = new PilaChars(n);
+        operadores = new PilaChars(n);
+    }
+    public boolean siEsOperador(char caracter){
+        if(caracter == '(' || caracter == ')' || caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '^'  || caracter == '^'){
+            return true;
+        }else{
+            return false;
+        }
     }
     public int prioridad(char caracter){
                     switch(caracter){
                     case '*':
-                        return 1;
                     case '/':
                         return 1;
                     case '+':
-                        return 2;
                     case '-':
                         return 2;
                 }
                     return -1;
     }
     public void infijaAPostfija(){
-        String postfija, acum, a, b, infija, temp;
+        String postfija, a, b, infija;
         char caracter;
-        int n, i, j, prioridad;
-        double num;
+        int n, i, j;
         postfija="";
         infija = txtDisplay.getText();
         n = infija.length();
-        acum = "";
-        temp = "";
-        num= 0;
-        prioridad = -1;
         for (i = 0; i < n; i++)
         {
             caracter = infija.charAt(i);
-            if(caracter == '+' || caracter == '-' || caracter == '*' || caracter == '/' || caracter == '^'){
-                if(i == 0 && caracter == '-'){
-                    numeros.poner(0);
-                }
-                prioridad = prioridad(caracter);
-                expresion.poner(caracter+"");
-            }
-            else if(Character.isDigit(caracter)){
-                temp = temp + caracter;
-                for(j=i+1; j<n ; j++){
-                    if(Character.isDigit(infija.charAt(j)) || infija.charAt(j) == '.'){
-                        temp = temp + infija.charAt(j)+"";
-                    }else{
-                        break;
+            if(siEsOperador(caracter)){
+              if(caracter == ')'){
+                    while(!operadores.estaVacio() && operadores.verUltimo() != '('){
+                        postfija += operadores.sacar()+", ";
+                    }if(!operadores.estaVacio()){
+                        operadores.sacar();
                     }
+                }else if (siEsOperador(caracter)){
+                    if(!operadores.estaVacio() && prioridad(caracter) <= prioridad(operadores.verUltimo())){
+                        postfija += operadores.sacar()+", ";
+                    }else{
+                        while(!operadores.estaVacio() && prioridad(caracter) >= prioridad(operadores.verUltimo())){
+                            String encima = operadores.sacar()+"";
+                            if(!encima.equals("(")){
+                                postfija += encima+", ";
+                            }
+                        }
+                    }
+                    operadores.poner(caracter);
                 }
-                num = Double.parseDouble(temp);
-                numeros.poner(num);
-                postfija = postfija + temp+", ";
-                num= 0;
-                temp="";
-                i=j;
-            }else{
-                
+  
             }
-            
+            else if(!siEsOperador(caracter)){
+                if(i+1<n && !siEsOperador(infija.charAt(i+1))  ){
+                    postfija = postfija + caracter;
+                }
+                else{
+                    postfija = postfija + caracter;
+                    postfija += ", ";
+                }
+            }
+        }
+        while(!operadores.estaVacio()){
+            postfija += operadores.sacar()+", ";
         }
         txtDisplay.setText(postfija);
     }
