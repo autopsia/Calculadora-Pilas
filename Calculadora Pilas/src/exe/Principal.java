@@ -25,18 +25,18 @@ public class Principal extends javax.swing.JFrame {
         }
     }
     public int prioridad(char caracter){
-                    switch(caracter){
-                    case '^':
-                        return 3;
-                    case '*':
-                    case '/':
-                    case '%':
-                        return 2;
-                    case '+':
-                    case '-':
-                        return 1;
-                }
-                    return -1;
+        switch(caracter){
+            case '^':
+                return 3;
+            case '*':
+            case '/':
+            case '%':
+                return 2;
+            case '+':
+            case '-':
+                return 1;
+        }
+        return -1;
     }
     public void infijaAPostfija(){
         String postfija, infija;
@@ -51,35 +51,52 @@ public class Principal extends javax.swing.JFrame {
             if(caracter == '('){
                 operadores.poner(caracter);
             }
+            //Si el caracter es ) saca operadores hasta encontrar una ( la que luego elimina sin agregarla a la cadena
             else if(caracter == ')'){
-                    while(!operadores.estaVacio() && operadores.verUltimo() != '('){
-                        postfija += operadores.sacar()+", ";
-                    }
-                        operadores.sacar();
-                    
-                
-                    }  
-              else if (siEsOperador(caracter)){
-                    while(!operadores.estaVacio() && operadores.verUltimo() != '(' && prioridad(caracter) <= prioridad(operadores.verUltimo())){
-                        postfija += operadores.sacar()+", ";  
-                }operadores.poner(caracter);
-              }
-            
+                while(!operadores.estaVacio() && operadores.verUltimo() != '('){
+                    postfija += operadores.sacar()+", ";
+                }
+                operadores.sacar();
+            }
+            //Si es operador realiza una comprobacion de prioridad antes de imprimir los caracteres
+            else if (siEsOperador(caracter)){
+                while(!operadores.estaVacio() && operadores.verUltimo() != '(' && prioridad(caracter) <= prioridad(operadores.verUltimo())){
+                    postfija += operadores.sacar()+", ";  
+                }
+                operadores.poner(caracter);
+            }
+            //Si no es operador añade caracteres hasta encontrar un operador
             else if(!siEsOperador(caracter)){
                 if(i+1<n && !siEsOperador(infija.charAt(i+1))  ){
-                    postfija = postfija + caracter;
+                    postfija += caracter;
                 }
                 else{
-                    postfija = postfija + caracter;
-                    postfija += ", ";
+                    postfija += caracter+", ";
                 }
             }
         }
         while(!operadores.estaVacio()){
             postfija += operadores.sacar()+", ";
         }
-        
         txtDisplay.setText(postfija.substring(0, postfija.length()-2));
+    }
+    public void anadeCaracter(String c){
+        //Validación para no repetir operandos exepto cuando hay un menos al inicio
+        if(c.equals("+") || c.equals("-") || c.equals("*") || c.equals("/") || c.equals("^")  || c.equals("%")){
+            int pos = txtDisplay.getText().length()-1;
+            String d = txtDisplay.getText();
+            if(d.equals("") && c.equals("-") && d.length() > -1){
+                txtDisplay.setText(txtDisplay.getText()+c);
+            }else if(pos > -1){
+                char dc = d.charAt(pos);
+                    if(dc != '+' && dc != '-' && dc !='*' && dc !='/' && dc != '^'  && dc != '%' && d.length() > 0){
+                       txtDisplay.setText(txtDisplay.getText()+c);
+                    }     
+            }
+        }else{
+            txtDisplay.setText(txtDisplay.getText()+c);
+        }
+
     }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -412,47 +429,47 @@ public class Principal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn7ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"7");
+        anadeCaracter("7");
     }//GEN-LAST:event_btn7ActionPerformed
 
     private void btn8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn8ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"8");
+        anadeCaracter("8");
     }//GEN-LAST:event_btn8ActionPerformed
 
     private void btn9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn9ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"9");
+        anadeCaracter("9");
     }//GEN-LAST:event_btn9ActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"4");
+        anadeCaracter("4");
     }//GEN-LAST:event_btn4ActionPerformed
 
     private void btn6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn6ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"6");
+        anadeCaracter("6");
     }//GEN-LAST:event_btn6ActionPerformed
 
     private void btn5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn5ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"5");
+        anadeCaracter("5");
     }//GEN-LAST:event_btn5ActionPerformed
 
     private void btn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn1ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"1");
+        anadeCaracter("1");
     }//GEN-LAST:event_btn1ActionPerformed
 
     private void btn3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn3ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"3");
+        anadeCaracter("3");
     }//GEN-LAST:event_btn3ActionPerformed
 
     private void btn2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn2ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"2");
+        anadeCaracter("2");
     }//GEN-LAST:event_btn2ActionPerformed
 
     private void btn0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn0ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"0");
+        anadeCaracter("0");
     }//GEN-LAST:event_btn0ActionPerformed
 
     private void btnDecimalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDecimalActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+".");
+        anadeCaracter(".");
     }//GEN-LAST:event_btnDecimalActionPerformed
 
     private void btnEqualsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEqualsActionPerformed
@@ -468,11 +485,11 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCEActionPerformed
 
     private void btnPlusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPlusActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"+");
+        anadeCaracter("+");
     }//GEN-LAST:event_btnPlusActionPerformed
 
     private void btnMinusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMinusActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"-");
+        anadeCaracter("-");
     }//GEN-LAST:event_btnMinusActionPerformed
 
     private void btnACActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnACActionPerformed
@@ -480,19 +497,19 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnACActionPerformed
 
     private void btnMultiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMultiActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"*");
+        anadeCaracter("*");
     }//GEN-LAST:event_btnMultiActionPerformed
 
     private void btnDivisionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDivisionActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"/");
+        anadeCaracter("/");
     }//GEN-LAST:event_btnDivisionActionPerformed
 
     private void btnPare1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPare1ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+"(");
+        anadeCaracter("(");
     }//GEN-LAST:event_btnPare1ActionPerformed
 
     private void btnPare2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPare2ActionPerformed
-        txtDisplay.setText(txtDisplay.getText()+")");
+        anadeCaracter(")");
     }//GEN-LAST:event_btnPare2ActionPerformed
 
     private void txtDisplayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDisplayActionPerformed
