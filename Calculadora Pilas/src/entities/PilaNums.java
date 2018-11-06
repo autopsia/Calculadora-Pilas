@@ -1,26 +1,27 @@
 
 package entities;
+import java.math.BigDecimal;
 
 public class PilaNums
 {
     int cima;
-    double[] PilaVector;
+    BigDecimal[] PilaVector;
 
     public PilaNums(int tam)
     {
-        PilaVector = new double[tam];
+        PilaVector = new BigDecimal[tam];
         cima = -1;
     }
 
-    public void poner(double dato)
+    public void poner(BigDecimal dato)
     {
         cima = cima + 1;
         PilaVector[cima] = dato;
     }
 
-    public double sacar()
+    public BigDecimal sacar()
     {
-        double aux;
+        BigDecimal aux;
             
         aux = PilaVector[cima];
         cima = cima - 1;
